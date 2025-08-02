@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chatbot</title>
+        <style>
+            body { font-family: Arial,sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+            #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+            .message { margin: 5px 0; }
+            .user { color: blue; }
+            .bot { color: green; }
+        </style>
+    </head>
+    <body>
+        <h2>Customer Support Chatbot</h2>
+        <div id="chatbox"></div>
+        <input type="text" id="message" placeholder="Type your message..." style="width:80%;" />
+        <button onClick="sendMessage()">Send</button>
+
+        <script>
+            function appendMessage(sender, text) {
+                const chatbox = document.getElementById("chatbox");
+                const message = document.createElement("div");
+                message.className = "message " + sender;
+                message.textContent = sender.toUpperCase() + ": " + text;
+                chatbox.appendChild(message);
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const input = document.getElementById("message");
+                const msg = input.value.trim();
+                if (!msg) return;
+                appendMessage("user", msg);
+                input.value="";
+
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify({message: msg})
+                });
+
+                const data = await response.json();
+                appendMessage("bot", data.response);
+            }
+        </script>
+    </body>
+</html>

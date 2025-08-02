@@ -1,0 +1,9 @@
+text,intent
+"hello","greeting"
+"hi", "greeting"
+"where is my order","order_status"
+"track my order","order_status"
+"i want a refund","refund"
+"return this item","refund"
+"thanks","thanks"
+"bye","goodbye"
